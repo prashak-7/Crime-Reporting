@@ -1,0 +1,19 @@
+doctype html 
+html 
+  head 
+    title=title
+    link(rel="stylesheet", href="/css/styles.css")
+  body
+    main.main
+      .form__container.login-form
+        h2.heading-secondary Admin
+        form.form.form--adminLogin 
+          .form__group
+            label.form__label(for="email") Email address
+            input#adminEmail.form__input(type="email" placeholder="you@example.com") 
+          .form__group
+            label.form__label(for="password") Password 
+            input#adminPassword.form__input(type="password" placeholder="••••••••••")
+          .form__group 
+            input.form-btn.login(type="submit" value='LOGIN')
+  script(src="/js/bundle.js")

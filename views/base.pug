@@ -1,0 +1,17 @@
+doctype html 
+html 
+  head 
+    title=title 
+    link(rel="stylesheet", href="/css/styles.css")
+  body 
+    // HEADER 
+    include _header
+    
+    // CONTENT
+    block content 
+
+    include _footer
+    //SCRIPTS
+    //- script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.3/axios.min.js") 
+    //- script(src="/js/login.js") 
+    script(src="/js/bundle.js")

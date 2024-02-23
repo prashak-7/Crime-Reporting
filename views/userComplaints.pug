@@ -1,0 +1,31 @@
+extends base
+block content 
+
+  main.main
+    if (complains.length >=1) 
+      .table 
+        section.table__header
+          h2.heading-secondary complaint reports 
+        section.table__body 
+            table.table__user__complaints
+              thead
+                tr
+                  th Logged By
+                  th Reported Date
+                  th Date Of Crime
+                  th Location
+                  th Description
+                  th Contact
+                  th Status
+              tbody 
+                each complain in complains 
+                  tr 
+                    td= complain.fullName
+                    td= complain.complainedDate.toLocaleDateString("en-us")
+                    td= complain.crimeDate.toLocaleDateString("en-us")
+                    td= complain.crimeLocation 
+                    td= complain.crimeDescription
+                    td= complain.contactNumber
+                    td= complain.status
+    else 
+      p.complaint__msg No registered complaint found.

@@ -1,0 +1,12 @@
+extends base
+block content 
+  .user__panel 
+    h2.headline.headline-user Welcome, #{user.firstName}
+    .user__box
+      .user__panel__links 
+        a.user__panel__el(href="/me") My account 
+        a.user__panel__el(href="/register-complain") Log complaint 
+        a.user__panel__el(href="/my-complaints") My complaints
+        //- a.user__panel__el(href="/update-me") Change Password
+      .img__container
+        img(src="/img/crime.webp")

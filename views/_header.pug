@@ -1,0 +1,9 @@
+header.header.header-shadow 
+  nav.nav
+    if user 
+      a.nav__el(href="/") Home
+      a.nav__el#logout(href="/") Log out
+    else
+      a.nav__el(href="/") Home
+      a.nav__el(href="/register") Register 
+      a.nav__el(href="/login") Login 

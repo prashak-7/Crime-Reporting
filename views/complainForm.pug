@@ -1,0 +1,32 @@
+extends base
+block content
+  main.main
+    .form__container.complain-form
+      h2.heading-secondary Register Complain
+      form.form.form--complain
+        .form__group__container
+          .form__group
+            label.form__label(for="name") Full Name
+            input#name.form__input(type="text" placeholder="Complainer name") 
+          .form__group
+            label.form__label(for="contact-num") Contact number 
+            input#contact-num.form__input(type="number" placeholder="+977")
+          .form__group
+            label.form__label(for="location") Crime Location
+            input#location.form__input(type="text" placeholder="e.g. Ring road") 
+          .form__group
+            label.form__label(for="crime-date") Date of crime 
+            input#crime-date.form__input(type="date")
+          .form__group 
+            label.form__label(for="province") Province
+            input#province.form__input(type="text" value="Bagmati" readonly="readonly")
+          .form__group 
+            label.form__label(for="police-station") Police Station
+            select#police-station.select
+              each station in stations.policeStations
+                option(value=`${station}`)= station   
+          .form__group 
+            label.form__label(for="crime-description") Crime Description
+            textarea#crime-description.textarea(cols="30", rows="10")  
+          .form__group 
+            input.form-btn.login(type="submit" value='Register Complain')

@@ -64,15 +64,17 @@ exports.getComplainForm = catchAsync(async (req, res, next) => {
 });
 
 exports.getAdminLoginForm = catchAsync(async (req, res, next) => {
-  res.status(200).render("adminForm", {
+  res.status(200).render("admin/adminForm", {
     title: "Admin Login",
   });
 });
 
 exports.getAdminDashboard = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    status: "success",
-    message: "adminDashboard displayed",
-  });
-  // .render("adminDashboard");
+  res
+    .status(200)
+    // .json({
+    //   status: "success",
+    //   message: "adminDashboard displayed",
+    // });
+    .render("admin/adminDashboard");
 });

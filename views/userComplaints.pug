@@ -10,22 +10,20 @@ block content
             table.table__user__complaints
               thead
                 tr
-                  th Logged By
-                  th Reported Date
-                  th Date Of Crime
-                  th Location
+                  th Sr. No.
+                  th Reported On
                   th Description
-                  th Contact
+                  th Police Station
+                  th Phone No.
                   th Status
               tbody 
-                each complain in complains 
+                each complain,i in complains 
                   tr 
-                    td= complain.fullName
+                    td= i+1
                     td= complain.complainedDate.toLocaleDateString("en-us")
-                    td= complain.crimeDate.toLocaleDateString("en-us")
-                    td= complain.crimeLocation 
                     td= complain.crimeDescription
+                    td= complain.policeStation
                     td= complain.contactNumber
                     td= complain.status
     else 
-      p.complaint__msg No registered complaint found.
+     p.complaint__msg No registered complaint found.

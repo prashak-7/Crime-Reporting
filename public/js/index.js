@@ -1,20 +1,24 @@
 // DEALS WITH GETTING DATA FROM USER INTERFACE AND DELEGATING THE ACTION
 import { register, login, logout } from "./login";
 import { updateUser } from "./updateUser";
-import { complaint } from "./complaint";
+import { complaint, updateComplaint } from "./complaint";
 import { adminLogin } from "./admin";
+import { logoutAdmin } from "./admin";
+import { deleteComplaint } from "./complaint";
 
 const registerForm = document.querySelector(".form--register");
 const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector("#logout");
 const adminLoginForm = document.querySelector(".form--adminLogin");
+const logOutAdminBtn = document.querySelector("#logoutAdmin");
 
 // ACCOUNT SETTINGS
 const userPhotoForm = document.querySelector(".user-photo");
 const userPasswordForm = document.querySelector(".user-data");
 
-// REGISTER COMPLAIN
+//  COMPLAIN
 const complainForm = document.querySelector(".form--complain");
+const updateComplaintForm = document.querySelector(".form--updateComplaint");
 
 if (loginForm)
   loginForm.addEventListener("submit", (e) => {
@@ -48,6 +52,8 @@ if (registerForm)
   });
 
 if (logOutBtn) logOutBtn.addEventListener("click", logout);
+
+if (logOutAdminBtn) logOutAdminBtn.addEventListener("click", logoutAdmin);
 
 if (userPhotoForm) {
   userPhotoForm.addEventListener("submit", (e) => {
@@ -99,6 +105,24 @@ if (complainForm) {
       province,
       policeStation
     );
+  });
+}
+
+if (updateComplaintForm) {
+  const updateBtn = document.querySelector("input[value='Update']");
+  const deleteBtn = document.querySelector("input[value='Delete']");
+  updateBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const status = document.getElementById("status").value;
+    updateComplaint(status);
+  });
+
+  deleteBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    deleteComplaint();
+    window.setTimeout(() => {
+      location.assign("http://127.0.0.1:8000/all-complaints");
+    }, 300);
   });
 }
 

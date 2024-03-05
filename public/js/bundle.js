@@ -5624,7 +5624,7 @@ var updateUser = exports.updateUser = /*#__PURE__*/function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.complaint = void 0;
+exports.updateComplaint = exports.deleteComplaint = exports.complaint = void 0;
 var _axios = _interopRequireDefault(require("axios"));
 var _alerts = require("./alerts");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -5642,7 +5642,7 @@ var complaint = exports.complaint = /*#__PURE__*/function () {
           _context.next = 3;
           return (0, _axios.default)({
             method: "POST",
-            url: "http://127.0.0.1:8000/register-complain",
+            url: "http://127.0.0.1:8000/register-complaint",
             data: {
               fullName: fullName,
               contactNumber: contactNumber,
@@ -5674,13 +5674,79 @@ var complaint = exports.complaint = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
+var updateComplaint = exports.updateComplaint = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(status) {
+    var complaintId, res;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.prev = 0;
+          complaintId = window.location.pathname.split("/")[2];
+          _context2.next = 4;
+          return (0, _axios.default)({
+            method: "PATCH",
+            url: "http://127.0.0.1:8000/update-complaint/",
+            data: {
+              complaintId: complaintId,
+              status: status
+            }
+          });
+        case 4:
+          res = _context2.sent;
+          _context2.next = 10;
+          break;
+        case 7:
+          _context2.prev = 7;
+          _context2.t0 = _context2["catch"](0);
+          console.log(_context2.t0);
+        case 10:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2, null, [[0, 7]]);
+  }));
+  return function updateComplaint(_x8) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+var deleteComplaint = exports.deleteComplaint = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var complaintId, res;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          complaintId = window.location.pathname.split("/")[2];
+          _context3.prev = 1;
+          _context3.next = 4;
+          return (0, _axios.default)({
+            method: "DELETE",
+            url: "http://127.0.0.1:8000/delete-complaint/".concat(complaintId, "/")
+          });
+        case 4:
+          res = _context3.sent;
+          _context3.next = 10;
+          break;
+        case 7:
+          _context3.prev = 7;
+          _context3.t0 = _context3["catch"](1);
+          console.log(_context3.t0);
+        case 10:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3, null, [[1, 7]]);
+  }));
+  return function deleteComplaint() {
+    return _ref3.apply(this, arguments);
+  };
+}();
 },{"axios":"../../node_modules/axios/index.js","./alerts":"alerts.js"}],"admin.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.adminLogin = void 0;
+exports.logoutAdmin = exports.adminLogin = void 0;
 var _axios = _interopRequireDefault(require("axios"));
 var _alerts = require("./alerts");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -5728,6 +5794,37 @@ var adminLogin = exports.adminLogin = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
+var logoutAdmin = exports.logoutAdmin = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.prev = 0;
+          _context2.next = 3;
+          return (0, _axios.default)({
+            method: "GET",
+            url: "http://127.0.0.1:8000/admin-logout"
+          });
+        case 3:
+          res = _context2.sent;
+          if (res.status === "success") location.reload(true);
+          _context2.next = 10;
+          break;
+        case 7:
+          _context2.prev = 7;
+          _context2.t0 = _context2["catch"](0);
+          (0, _alerts.showAlert)("error", "Error logging out! Try again");
+        case 10:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2, null, [[0, 7]]);
+  }));
+  return function logoutAdmin() {
+    return _ref2.apply(this, arguments);
+  };
+}();
 },{"axios":"../../node_modules/axios/index.js","./alerts":"alerts.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -5743,13 +5840,15 @@ var registerForm = document.querySelector(".form--register");
 var loginForm = document.querySelector(".form--login");
 var logOutBtn = document.querySelector("#logout");
 var adminLoginForm = document.querySelector(".form--adminLogin");
+var logOutAdminBtn = document.querySelector("#logoutAdmin");
 
 // ACCOUNT SETTINGS
 var userPhotoForm = document.querySelector(".user-photo");
 var userPasswordForm = document.querySelector(".user-data");
 
-// REGISTER COMPLAIN
+//  COMPLAIN
 var complainForm = document.querySelector(".form--complain");
+var updateComplaintForm = document.querySelector(".form--updateComplaint");
 if (loginForm) loginForm.addEventListener("submit", function (e) {
   e.preventDefault();
   var email = document.getElementById("email").value;
@@ -5769,6 +5868,7 @@ if (registerForm) registerForm.addEventListener("submit", function (e) {
   (0, _login.register)(firstName, lastName, age, address, email, gender, password, confirmPassword);
 });
 if (logOutBtn) logOutBtn.addEventListener("click", _login.logout);
+if (logOutAdminBtn) logOutAdminBtn.addEventListener("click", _admin.logoutAdmin);
 if (userPhotoForm) {
   userPhotoForm.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -5825,6 +5925,22 @@ if (complainForm) {
     (0, _complaint.complaint)(fullName, contactNumber, crimeLocation, crimeDate, crimeDescription, province, policeStation);
   });
 }
+if (updateComplaintForm) {
+  var updateBtn = document.querySelector("input[value='Update']");
+  var deleteBtn = document.querySelector("input[value='Delete']");
+  updateBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    var status = document.getElementById("status").value;
+    (0, _complaint.updateComplaint)(status);
+  });
+  deleteBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    (0, _complaint.deleteComplaint)();
+    window.setTimeout(function () {
+      location.assign("http://127.0.0.1:8000/all-complaints");
+    }, 300);
+  });
+}
 if (adminLoginForm) adminLoginForm.addEventListener("submit", function (e) {
   e.preventDefault();
   var email = document.getElementById("adminEmail").value;
@@ -5856,7 +5972,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61388" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51188" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

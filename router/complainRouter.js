@@ -4,24 +4,45 @@ const authController = require("../controllers/authController");
 
 const router = express.Router();
 
+router.post(
+  "/register-complaint",
+  authController.protect,
+  complainController.createComplaint
+);
+
 router.get(
   "/my-complaints",
   authController.protect,
   authController.restrictTo("user"),
-  complainController.getComplain
+  complainController.userComplaint
 );
 
 router.get(
-  "/complains",
+  "/all-complaints",
   authController.protect,
   authController.restrictTo("admin"),
-  complainController.getAllComplains
+  complainController.getAllComplaints
 );
 
-router.post(
-  "/register-complain",
+router.get(
+  "/all-complaints/:id",
   authController.protect,
-  complainController.createComplain
+  authController.restrictTo("admin"),
+  complainController.getComplaint
+);
+
+router.patch(
+  "/update-complaint/",
+  authController.protect,
+  authController.restrictTo("admin"),
+  complainController.updateComplaint
+);
+
+router.delete(
+  "/delete-complaint/:id",
+  authController.protect,
+  authController.restrictTo("admin"),
+  complainController.deleteComplaint
 );
 
 module.exports = router;

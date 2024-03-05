@@ -1,20 +1,7 @@
 const catchAsync = require("../utils/catchAsync");
 const Complain = require("../modals/complainModal");
 
-exports.getAllComplains = catchAsync(async (req, res, next) => {
-  const complains = await Complain.find().populate({
-    path: "complainer",
-    select: "-__v -role",
-  });
-  res.status(200).json({
-    status: "success",
-    data: {
-      complains,
-    },
-  });
-});
-
-exports.createComplain = catchAsync(async (req, res, next) => {
+exports.createComplaint = catchAsync(async (req, res, next) => {
   // Allow nested routes
   if (!req.body.user) req.body.user = req.user.id;
 
@@ -26,7 +13,7 @@ exports.createComplain = catchAsync(async (req, res, next) => {
     crimeDescription: req.body.crimeDescription,
     complainer: req.user.id,
     province: req.body.province,
-    policeStation: req.body.province,
+    policeStation: req.body.policeStation,
   });
 
   res.status(200).json({
@@ -37,7 +24,23 @@ exports.createComplain = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getComplain = catchAsync(async (req, res, next) => {
+exports.getAllComplaints = catchAsync(async (req, res, next) => {
+  const complaints = await Complain.find().populate({
+    path: "complainer",
+    select: "-__v -role",
+  });
+  res
+    .status(200)
+    // .json({
+    //   status: "success",
+    //   data: {
+    //     complaints,
+    //   },
+    // });
+    .render("admin/allComplaints", { complaints });
+});
+
+exports.userComplaint = catchAsync(async (req, res, next) => {
   const complains = await Complain.find({ complainer: req.user.id });
   // res.status(200).json({
   //   status: "success",
@@ -47,4 +50,27 @@ exports.getComplain = catchAsync(async (req, res, next) => {
     complains,
     title: "My Complaints",
   });
+});
+
+exports.getComplaint = catchAsync(async (req, res, next) => {
+  const complaint = await Complain.findById(req.params.id);
+  res
+    .status(200)
+    // .json({
+    //   status: "success",
+    //   data: {
+    //     complaint,
+    //   },
+    // });.
+    .render("admin/singleComplaint", { complaint });
+});
+
+exports.updateComplaint = catchAsync(async (req, res, next) => {
+  const { complaintId, status } = req.body;
+  await Complain.findByIdAndUpdate(complaintId, { status });
+});
+
+exports.deleteComplaint = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  await Complain.findByIdAndDelete(id);
 });

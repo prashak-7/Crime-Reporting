@@ -29,4 +29,11 @@ router.get(
   userController.getMe
 );
 
+router.get(
+  "/all-users",
+  authController.protect,
+  authController.restrictTo("admin"),
+  userController.getAllUsers
+);
+
 module.exports = router;

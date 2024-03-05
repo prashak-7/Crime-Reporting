@@ -1,0 +1,27 @@
+extends base
+block content 
+
+  section.section__inner
+    if (users.length >=1)
+      .table 
+        section.table__header 
+          h2.heading-secondary All Users 
+        section.table__body 
+          table 
+            thead 
+              tr 
+                th Sr. No.
+                th Photo 
+                th Name 
+                th Email
+                th Address
+            tbody 
+              each user,i in users 
+                tr 
+                  td= i+1
+                  td: img(src=`/img/users/${user.photo}` alt=`${user.firstName} photo`)
+                  td #{user.firstName} #{user.lastName}
+                  td= user.email 
+                  td= user.address
+    else 
+      p.complaint__msg No registered users found.

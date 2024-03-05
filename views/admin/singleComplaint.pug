@@ -1,0 +1,39 @@
+extends base
+block content 
+
+  section.section__inner
+    .complaint__info 
+      div 
+        p Full Name 
+        p= complaint.fullName 
+      div
+        p Contact Number
+        p= complaint.contactNumber 
+      div 
+        p Reported Date 
+        p= complaint.complainedDate.toLocaleDateString("en-us") 
+      div 
+        p Crime Date 
+        p=complaint.crimeDate.toLocaleDateString("en-us") 
+      div 
+        p Province 
+        p= complaint.province
+      div   
+        p Crime Location 
+        p=complaint.crimeLocation 
+      div 
+        p Police Station 
+        p= complaint.policeStation 
+      div 
+        p Crime Description 
+        p= complaint.crimeDescription
+      div 
+        p Status
+        form.form--updateComplaint
+          select#status
+            option(value="Pending") Pending 
+            option(value="In progress") In Progress
+            option(value="Solved") Solved
+          .btn__group
+            input(type="submit" value="Update")
+            input(type="submit" value="Delete") 

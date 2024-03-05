@@ -1,0 +1,31 @@
+extends base
+block content
+
+  section.section__inner
+    if (complaints.length >=1)
+      .table 
+        section.table__header 
+          h2.heading-secondary All Complaint Reports 
+        section.table__body 
+          table
+            thead 
+              tr 
+                th Sr. No.
+                th Logged By
+                th Reported On
+                th Date of Crime 
+                th Police Station 
+                th Status
+                th Action
+            tbody
+              each complaint,i in complaints
+                tr 
+                  td= i+1
+                  td= complaint.fullName 
+                  td= complaint.complainedDate.toLocaleDateString('en-us')
+                  td= complaint.crimeDate.toLocaleDateString("en-us")
+                  td= complaint.policeStation
+                  td= complaint.status
+                  td: a(href=`/all-complaints/${complaint._id}`) View
+    else
+      p.complaint__msg No registered complaint found.

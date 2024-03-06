@@ -11,19 +11,21 @@ router.get("/logout", authController.logout);
 router.patch(
   "/update-password",
   authController.protect,
+  authController.restrictTo("user"),
   authController.updatePassword
 );
 
 router.patch(
   "/update-me",
   authController.protect,
+  authController.restrictTo("user"),
   userController.uploadUserPhoto,
   userController.resizeUserPhoto,
   userController.updateMe
 );
 
 router.get(
-  "/me",
+  "/my-account",
   authController.protect,
   authController.restrictTo("user"),
   userController.getMe
@@ -36,4 +38,10 @@ router.get(
   userController.getAllUsers
 );
 
+router.post(
+  "/delete-me",
+  authController.protect,
+  authController.restrictTo("user"),
+  userController.deleteMe
+);
 module.exports = router;

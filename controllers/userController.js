@@ -84,3 +84,20 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  const { password } = req.body;
+  const user = await User.findById(req.user.id).select("+password");
+
+  if (!(await user.correctPassword(password, user.password))) {
+    return next(new AppError("Your password doesn't match.", 401));
+  }
+  await User.findByIdAndDelete(req.user.id);
+  res.cookie("jwt", "", {
+    expires: new Date(Date.now() + 1 * 1000),
+    httpOnly: true,
+  }),
+    res.status(200).json({
+      status: "success",
+    });
+});

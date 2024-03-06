@@ -11,6 +11,7 @@ block content
           label(for="photo") Choose new photo
           button.btn.btn--save-photo Upload
       form.user-data
+        p.heading-secondary Change Your Password
         .form__group
           label.form__label(for="currentPassword") Current password 
           input#currentPassword.form__input(type="password" placeholder="••••••••••" required)
@@ -22,4 +23,13 @@ block content
           input#confirmPassword.form__input(type="password" placeholder="••••••••••" required)
         .form__group 
           button.btn.btn--save-password Update password
-        
+      button.delete-btn.delete-btn-cta Delete Account
+    .modal
+      form.delete-user
+        p.heading-secondary Delete Account 
+        .form__group 
+          label.form__label(for="delAccPassword") Password       
+          input.form__input#delAccPassword(type="password" placeholder="••••••••••")
+        .form__group 
+          input.delete-btn.delete-btn-form(type="submit" value="Delete")
+    .overlay

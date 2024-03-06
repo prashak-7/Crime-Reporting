@@ -175,9 +175,29 @@ body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
-  overflow: auto;
+  position: relative;
   box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.2);
 }
+
+/* .profile::after {
+  content: "delete account";
+  display: inline-block;
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 2px;
+  text-transform: capitalize;
+  color: #fff;
+  background-color: #eb4d4b;
+  font-size: 1.5rem;
+  position: absolute;
+  bottom: -5rem;
+  filter: brightness(95%);
+}
+
+.profile:hover::after {
+  filter: brightness(100%);
+} */
 
 .profile__image__box {
   margin: 0 auto;
@@ -185,25 +205,12 @@ body {
 }
 
 .user-data {
-  margin-top: 50px;
+  margin-top: 10px;
 }
 
-.profile__details {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  padding: 0 1rem;
-}
-
-.details__group {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 2rem;
-  color: var(--color-secondary);
+.user-data p {
+  margin-bottom: 20px;
+  text-align: left;
 }
 
 .form__container {
@@ -236,6 +243,10 @@ body {
   -webkit-background-clip: text;
   text-align: center;
   font-weight: 500;
+}
+
+.heading-secondary--error {
+  background-image: linear-gradient(to right, #ff7730, #eb4d4b);
 }
 
 .headline {
@@ -320,6 +331,68 @@ body {
 .btn--save-photo {
   margin: 15px 0 0 35px;
   width: 50%;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: 200ms ease-in-out;
+  visibility: hidden;
+  min-width: 35rem;
+  padding: 1.75rem 1.25rem;
+  border-radius: 2px;
+  background: var(--color-tertiary);
+  box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+.modal.active {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: 200ms ease-in-out;
+  visibility: hidden;
+  backdrop-filter: blur(3px);
+  pointer-events: none;
+}
+
+.overlay.active {
+  pointer-events: all;
+}
+
+.active {
+  visibility: visible;
+}
+
+.delete-btn {
+  color: #fff;
+  background: #eb4d4b;
+  padding: 0.5rem 0.75rem;
+  font-size: 1.5rem;
+  border-radius: 2px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  filter: brightness(95%);
+}
+
+.delete-btn:hover {
+  filter: brightness(100%);
+}
+
+.delete-btn-cta {
+  position: absolute;
+  bottom: -5rem;
+  width: fit-content;
 }
 
 .form__group:not(:last-child) {
@@ -450,4 +523,29 @@ body {
 
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
+}
+
+.error {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  max-width: 80rem;
+  text-align: center;
+}
+
+.error__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.error__msg {
+  font-size: 2rem;
+  font-weight: 700;
+  max-width: 50rem;
+  margin: 0 auto;
+  color: #444;
 }

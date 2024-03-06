@@ -206,8 +206,8 @@ tr td a:visited {
 }
 
 tr td img {
-  min-width: 6rem;
-  min-height: 6rem;
+  max-width: 6rem;
+  max-height: 6rem;
   border-radius: 50%;
   border: 1px solid #ccc;
 }

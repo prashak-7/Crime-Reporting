@@ -5,6 +5,7 @@ import { complaint, updateComplaint } from "./complaint";
 import { adminLogin } from "./admin";
 import { logoutAdmin } from "./admin";
 import { deleteComplaint } from "./complaint";
+import { deleteUser } from "./deleteUser";
 
 const registerForm = document.querySelector(".form--register");
 const loginForm = document.querySelector(".form--login");
@@ -15,6 +16,11 @@ const logOutAdminBtn = document.querySelector("#logoutAdmin");
 // ACCOUNT SETTINGS
 const userPhotoForm = document.querySelector(".user-photo");
 const userPasswordForm = document.querySelector(".user-data");
+const userDeleteForm = document.querySelector(".delete-user");
+const modal = document.querySelector(".modal");
+const overlay = document.querySelector(".overlay");
+const deleteBtnCta = document.querySelector(".delete-btn-cta");
+const deleteBtn = document.querySelector(".delete-btn-form");
 
 //  COMPLAIN
 const complainForm = document.querySelector(".form--complain");
@@ -82,6 +88,29 @@ if (userPasswordForm) {
     document.getElementById("currentPassword").value = "";
     document.getElementById("password").value = "";
     document.getElementById("confirmPassword").value = "";
+  });
+}
+
+// DELETE USER
+if (deleteBtnCta) {
+  deleteBtnCta.addEventListener("click", () => {
+    modal.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+}
+
+if (overlay) {
+  overlay.addEventListener("click", () => {
+    modal.classList.toggle("active");
+    overlay.classList.toggle("active");
+  });
+}
+
+if (userDeleteForm) {
+  userDeleteForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const password = document.getElementById("delAccPassword").value;
+    deleteUser(password);
   });
 }
 

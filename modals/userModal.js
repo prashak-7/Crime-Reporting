@@ -7,14 +7,18 @@ const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: [true, "First name is required"],
-    trim: true,
     validate: [validator.isAlpha, "Invalid first name"],
+    trim: true,
+    minlength: [3, "Provide your real name"],
+    maxlength: [15, "Provide your real name"],
   },
   lastName: {
     type: String,
     required: [true, "Last name is required"],
-    trim: true,
     validate: [validator.isAlpha, "Invalid last name"],
+    minlength: [3, "Provide your real name"],
+    maxlength: [15, "Provide your real name"],
+    trim: true,
   },
   age: {
     type: Number,
@@ -29,6 +33,14 @@ const userSchema = new mongoose.Schema({
   address: {
     type: String,
     required: [true, "Address is required"],
+    minlength: [4, "Provide a valid address"],
+    validate: {
+      validator: function (address) {
+        const addressRegex = /^[a-zA-Z0-9\s,'-]*$/;
+        return addressRegex.test(address);
+      },
+      message: "Provide a valid address",
+    },
   },
   email: {
     type: String,
@@ -80,6 +92,21 @@ userSchema.pre("save", async function (next) {
 
   this.password = await bcrypt.hash(this.password, 12);
   this.confirmPassword = undefined;
+  next();
+});
+
+userSchema.pre("save", function (next) {
+  // Capitalize the 'name' field
+  if (this.firstName) {
+    this.firstName =
+      this.firstName.charAt(0).toUpperCase() +
+      this.firstName.slice(1).toLowerCase();
+  }
+  if (this.lastName) {
+    this.lastName =
+      this.lastName.charAt(0).toUpperCase() +
+      this.lastName.slice(1).toLowerCase();
+  }
   next();
 });
 

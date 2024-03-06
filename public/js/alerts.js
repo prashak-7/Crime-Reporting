@@ -18,3 +18,13 @@ export const showImageAlert = (type, msg) => {
   document.querySelector(".profile").insertAdjacentHTML("afterend", markup);
   window.setTimeout(hideAlert, 3000);
 };
+
+export const showDeleteUserAlert = (type, msg) => {
+  hideAlert();
+  const markup = `<div class="alert alert--${type}" id="alertDeleteUser">${msg}</div>`;
+  document.querySelector(".modal").insertAdjacentHTML("afterend", markup);
+  document;
+  document.getElementById("alertDeleteUser").style.cssText =
+    "position: relative; background: #eb4d4b; color: #fff; width: fit-content";
+  window.setTimeout(hideAlert, 1500);
+};

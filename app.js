@@ -21,7 +21,9 @@ app.set("views", path.join(__dirname, "views"));
 // Routes
 app.use("/", viewsRouter);
 app.use("/", userRouter);
+app.use("/api", userRouter);
 app.use("/", complainRouter);
+app.use("/api", complainRouter);
 app.use("/", adminRouter);
 
 app.all("*", (req, res, next) => {

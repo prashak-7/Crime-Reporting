@@ -13,7 +13,7 @@ export const complaint = async (
   try {
     const res = await axios({
       method: "POST",
-      url: "http://127.0.0.1:8000/register-complaint",
+      url: "http://127.0.0.1:8000/api/register-complaint",
       data: {
         fullName,
         contactNumber,
@@ -38,7 +38,7 @@ export const updateComplaint = async (status) => {
     const complaintId = window.location.pathname.split("/")[2];
     const res = await axios({
       method: "PATCH",
-      url: `http://127.0.0.1:8000/update-complaint/`,
+      url: `http://127.0.0.1:8000/api/update-complaint/`,
       data: {
         complaintId,
         status,
@@ -54,7 +54,7 @@ export const deleteComplaint = async () => {
   try {
     const res = await axios({
       method: "DELETE",
-      url: `http://127.0.0.1:8000/delete-complaint/${complaintId}/`,
+      url: `http://127.0.0.1:8000/api/delete-complaint/${complaintId}/`,
     });
   } catch (err) {
     console.log(err);

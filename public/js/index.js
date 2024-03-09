@@ -66,10 +66,11 @@ if (userPhotoForm) {
     e.preventDefault();
     const form = new FormData();
     form.append("photo", document.getElementById("photo").files[0]);
-    updateUser(form, "photo");
-    setTimeout(() => {
-      location.reload();
-    }, 1000);
+    if (updateUser(form, "photo")) {
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    }
   });
 }
 
@@ -84,10 +85,6 @@ if (userPasswordForm) {
       { currentPassword, password, confirmPassword },
       "password"
     );
-
-    document.getElementById("currentPassword").value = "";
-    document.getElementById("password").value = "";
-    document.getElementById("confirmPassword").value = "";
   });
 }
 

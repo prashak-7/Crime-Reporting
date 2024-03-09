@@ -5,7 +5,7 @@ export const deleteUser = async (password) => {
   try {
     const res = await axios({
       method: "post",
-      url: "http://127.0.0.1:8000/delete-me",
+      url: "http://127.0.0.1:8000/api/delete-me",
       data: {
         password,
       },

@@ -3522,6 +3522,7 @@ function arrayToObject(arr) {
 function formDataToJSON(formData) {
   function buildPath(path, value, target, index) {
     let name = path[index++];
+    if (name === '__proto__') return true;
     const isNumericKey = Number.isFinite(+name);
     const isLast = index >= path.length;
     name = !name && _utils.default.isArray(target) ? target.length : name;
@@ -3602,9 +3603,6 @@ const defaults = {
     }
     const isFormData = _utils.default.isFormData(data);
     if (isFormData) {
-      if (!hasJSONContentType) {
-        return data;
-      }
       return hasJSONContentType ? JSON.stringify((0, _formDataToJSON.default)(data)) : data;
     }
     if (_utils.default.isArrayBuffer(data) || _utils.default.isBuffer(data) || _utils.default.isStream(data) || _utils.default.isFile(data) || _utils.default.isBlob(data)) {
@@ -4765,7 +4763,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.VERSION = void 0;
-const VERSION = exports.VERSION = "1.6.3";
+const VERSION = exports.VERSION = "1.6.7";
 },{}],"../../node_modules/axios/lib/helpers/validator.js":[function(require,module,exports) {
 'use strict';
 
@@ -4892,7 +4890,27 @@ class Axios {
    *
    * @returns {Promise} The Promise to be fulfilled
    */
-  request(configOrUrl, config) {
+  async request(configOrUrl, config) {
+    try {
+      return await this._request(configOrUrl, config);
+    } catch (err) {
+      if (err instanceof Error) {
+        let dummy;
+        Error.captureStackTrace ? Error.captureStackTrace(dummy = {}) : dummy = new Error();
+
+        // slice off the Error: ... line
+        const stack = dummy.stack ? dummy.stack.replace(/^.+\n/, '') : '';
+        if (!err.stack) {
+          err.stack = stack;
+          // match without the 2 top stack lines
+        } else if (stack && !String(err.stack).endsWith(stack.replace(/^.+\n.+\n/, ''))) {
+          err.stack += '\n' + stack;
+        }
+      }
+      throw err;
+    }
+  }
+  _request(configOrUrl, config) {
     /*eslint no-param-reassign:0*/
     // Allow for axios('example/url'[, config]) a la fetch API
     if (typeof configOrUrl === 'string') {
@@ -5469,7 +5487,7 @@ var login = exports.login = /*#__PURE__*/function () {
           _context.next = 3;
           return (0, _axios.default)({
             method: "POST",
-            url: "http://127.0.0.1:8000/login",
+            url: "http://127.0.0.1:8000/api/login",
             data: {
               email: email,
               password: password
@@ -5509,7 +5527,7 @@ var register = exports.register = /*#__PURE__*/function () {
           _context2.next = 3;
           return (0, _axios.default)({
             method: "POST",
-            url: "http://127.0.0.1:8000/register",
+            url: "http://127.0.0.1:8000/api/register",
             data: {
               firstName: firstName,
               lastName: lastName,
@@ -5597,7 +5615,7 @@ var updateUser = exports.updateUser = /*#__PURE__*/function () {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          url = type === "password" ? "http://127.0.0.1:8000/update-password" : "http://127.0.0.1:8000/update-me";
+          url = type === "password" ? "http://127.0.0.1:8000/api/update-password" : "http://127.0.0.1:8000/api/update-me";
           _context.prev = 1;
           _context.next = 4;
           return (0, _axios.default)({
@@ -5650,7 +5668,7 @@ var complaint = exports.complaint = /*#__PURE__*/function () {
           _context.next = 3;
           return (0, _axios.default)({
             method: "POST",
-            url: "http://127.0.0.1:8000/register-complaint",
+            url: "http://127.0.0.1:8000/api/register-complaint",
             data: {
               fullName: fullName,
               contactNumber: contactNumber,
@@ -5693,7 +5711,7 @@ var updateComplaint = exports.updateComplaint = /*#__PURE__*/function () {
           _context2.next = 4;
           return (0, _axios.default)({
             method: "PATCH",
-            url: "http://127.0.0.1:8000/update-complaint/",
+            url: "http://127.0.0.1:8000/api/update-complaint/",
             data: {
               complaintId: complaintId,
               status: status
@@ -5728,7 +5746,7 @@ var deleteComplaint = exports.deleteComplaint = /*#__PURE__*/function () {
           _context3.next = 4;
           return (0, _axios.default)({
             method: "DELETE",
-            url: "http://127.0.0.1:8000/delete-complaint/".concat(complaintId, "/")
+            url: "http://127.0.0.1:8000/api/delete-complaint/".concat(complaintId, "/")
           });
         case 4:
           res = _context3.sent;
@@ -5857,7 +5875,7 @@ var deleteUser = exports.deleteUser = /*#__PURE__*/function () {
           _context.next = 3;
           return (0, _axios.default)({
             method: "post",
-            url: "http://127.0.0.1:8000/delete-me",
+            url: "http://127.0.0.1:8000/api/delete-me",
             data: {
               password: password
             }
@@ -5940,10 +5958,11 @@ if (userPhotoForm) {
     e.preventDefault();
     var form = new FormData();
     form.append("photo", document.getElementById("photo").files[0]);
-    (0, _updateUser.updateUser)(form, "photo");
-    setTimeout(function () {
-      location.reload();
-    }, 1000);
+    if ((0, _updateUser.updateUser)(form, "photo")) {
+      setTimeout(function () {
+        location.reload();
+      }, 1000);
+    }
   });
 }
 if (userPasswordForm) {
@@ -5964,10 +5983,6 @@ if (userPasswordForm) {
               confirmPassword: confirmPassword
             }, "password");
           case 6:
-            document.getElementById("currentPassword").value = "";
-            document.getElementById("password").value = "";
-            document.getElementById("confirmPassword").value = "";
-          case 9:
           case "end":
             return _context.stop();
         }
@@ -6059,7 +6074,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58621" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52721" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

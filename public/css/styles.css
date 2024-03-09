@@ -101,6 +101,98 @@ body {
   overflow: auto;
 }
 
+.home {
+  flex: 1;
+  background-color: #f7f7f7;
+}
+
+.main__img {
+  background-image: linear-gradient(to right bottom, #0000007a, #0000002d),
+    url("../img/download.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 45rem;
+  width: 100%;
+  position: relative;
+}
+
+.main__text-box {
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  display: flex;
+  flex-direction: column;
+}
+
+.heading-primary {
+  text-transform: uppercase;
+  letter-spacing: 0.25rem;
+  font-size: 6rem;
+  color: var(--color-primary);
+}
+
+.main__text-box p {
+  text-transform: capitalize;
+  font-size: 2.5rem;
+  margin-top: 1rem;
+  color: var(--color-primary);
+  width: 20rem;
+}
+
+.main__text-box a,
+.main__text-box a:visited {
+  background-color: var(--main-blue);
+  text-decoration: none;
+  width: 10rem;
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  margin-top: 1.25rem;
+  text-align: center;
+  border-radius: 20px;
+  padding: 0.25rem 4rem;
+  outline: 2px solid var(--color-primary);
+}
+
+.main__text-box a:focus {
+  border: none;
+}
+
+.main__text-box img {
+  position: absolute;
+  width: 5rem;
+  height: 5rem;
+  right: 25rem;
+  bottom: -1.5rem;
+}
+
+.heading-topic {
+  margin-top: 1.5rem;
+  text-align: left !important;
+}
+
+.heading-topic::after {
+  content: "";
+  display: block;
+  margin-top: 0.5rem;
+  width: 100%;
+  height: 2px;
+  border-radius: 10px;
+  background-color: #bbb;
+}
+
+.section__description {
+  font-size: 2rem;
+  color: var(--color-secondary);
+  text-align: justify;
+  margin: 0.75rem 0;
+}
+
+.section__description:last-child {
+  color: #444;
+  font-weight: bold;
+}
+
 .user__panel {
   min-height: 65vh;
   min-width: 90rem;
@@ -548,4 +640,17 @@ input[type="number"]::-webkit-inner-spin-button {
   max-width: 50rem;
   margin: 0 auto;
   color: #444;
+}
+
+.footer {
+  background-color: #ddd;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.footer p {
+  color: #444;
+  font-size: 1.25rem;
+  padding: 1.5rem;
 }

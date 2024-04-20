@@ -1,4 +1,5 @@
 const PoliceStation = require("../modals/stationModal");
+const CrimeType = require("../modals/crimeTypeModal");
 const catchAsync = require("../utils/catchAsync");
 
 exports.getOverview = catchAsync(async (req, res, next) => {
@@ -51,6 +52,7 @@ exports.getUserDashboard = catchAsync(async (req, res, next) => {
 
 exports.getComplainForm = catchAsync(async (req, res, next) => {
   const stations = await PoliceStation.findOne();
+  const crimes = await CrimeType.findOne();
   res
     .status(200)
     // .json({
@@ -60,6 +62,7 @@ exports.getComplainForm = catchAsync(async (req, res, next) => {
     .render("complainForm", {
       title: "Register Complain",
       stations,
+      crimes,
     });
 });
 

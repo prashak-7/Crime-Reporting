@@ -97,8 +97,12 @@ body {
   background-color: var(--color-primary);
   flex: 1;
   position: relative;
-  padding: 4rem;
+  padding: 4rem 8rem;
   overflow: auto;
+}
+
+.main-form {
+  min-height: 89vh;
 }
 
 .home {
@@ -323,7 +327,7 @@ body {
 }
 
 .complain-form {
-  max-width: 50rem;
+  max-width: 55rem;
 }
 
 .heading-secondary {
@@ -365,6 +369,8 @@ body {
   height: 15rem;
   width: 15rem;
   border-radius: 50%;
+  outline-offset: 2px;
+  outline: 3px solid #bbb;
 }
 
 .form__upload {

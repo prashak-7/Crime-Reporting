@@ -121,6 +121,7 @@ if (complainForm) {
     const province = document.getElementById("province").value;
     const policeStation = document.getElementById("police-station").value;
     const crimeDescription = document.getElementById("crime-description").value;
+    const crimeType = document.getElementById("crime-type").value;
 
     complaint(
       fullName,
@@ -129,7 +130,8 @@ if (complainForm) {
       crimeDate,
       crimeDescription,
       province,
-      policeStation
+      policeStation,
+      crimeType
     );
   });
 }

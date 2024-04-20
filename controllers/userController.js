@@ -64,7 +64,12 @@ exports.getMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAllUsers = catchAsync(async (req, res, nextx) => {
+exports.getUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  res.status(200).render("admin/user", { user });
+});
+
+exports.getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find({ role: "user" });
   res.status(200).render("admin/allUsers", { users });
 });

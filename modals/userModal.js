@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
   address: {
     type: String,
     required: [true, "Address is required"],
-    minlength: [4, "Provide a valid address"],
+    minlength: [9, "Provide a valid address"],
     validate: {
       validator: function (address) {
         const addressRegex = /^[a-zA-Z0-9\s,'-]*$/;

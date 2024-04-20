@@ -1,0 +1,28 @@
+extends base 
+block content 
+
+  section.section__inner
+    .user-info 
+      img(src=`/img/users/${user.photo}`, alt="User photo")
+      .user-details 
+        ul 
+          li
+            p First name 
+            p= user.firstName 
+          li 
+            p Last name 
+            p= user.lastName
+          li 
+            p Email
+            p= user.email
+          li 
+            p Age 
+            p= user.age  
+          li 
+            p Gender 
+            p= user.gender[0].toUpperCase() + user.gender.substring(1)
+          li 
+            p Address 
+            p= user.address
+          
+

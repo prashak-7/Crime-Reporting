@@ -44,4 +44,12 @@ router.post(
   authController.restrictTo("user"),
   userController.deleteMe
 );
+
+router.get(
+  "/user/:id",
+  authController.protect,
+  authController.restrictTo("admin"),
+  userController.getUser
+);
+
 module.exports = router;

@@ -14,6 +14,7 @@ exports.createComplaint = catchAsync(async (req, res, next) => {
     complainer: req.user.id,
     province: req.body.province,
     policeStation: req.body.policeStation,
+    crimeType: req.body.crimeType,
   });
 
   res.status(200).json({
@@ -29,6 +30,7 @@ exports.getAllComplaints = catchAsync(async (req, res, next) => {
     path: "complainer",
     select: "-__v -role",
   });
+
   res
     .status(200)
     // .json({

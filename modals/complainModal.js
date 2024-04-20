@@ -5,20 +5,17 @@ const complainSchema = new mongoose.Schema({
   fullName: {
     type: String,
     required: [true, "Please specify your name"],
+    minlength: [7, "Please specify your name"],
     trim: true,
-    validate: {
-      validator: function (str) {
-        const stringWithoutSpaces = str.replace(/\s/g, "");
-        return validator.isAlpha(stringWithoutSpaces);
-      },
-      message: "Invalid fullname",
-    },
+    // validate: {
+    //   validator: function (str) {
+    //     const stringWithoutSpaces = str.replace(/\s/g, "");
+    //     return validator.isAlpha(stringWithoutSpaces);
+    //   },
+    //   message: "Invalid fullname",
+    // },
   },
-  crimeLocation: {
-    type: String,
-    required: [true, "Please specify the crime location"],
-    trim: true,
-  },
+
   contactNumber: {
     type: Number,
     required: [true, "Please specify your contact number"],
@@ -38,15 +35,40 @@ const complainSchema = new mongoose.Schema({
       },
     ],
   },
+  crimeLocation: {
+    type: String,
+    required: [true, "Please specify the crime location"],
+    trim: true,
+    minlength: [4, "Provide a valid address"],
+    validate: {
+      validator: function (address) {
+        const addressRegex = /^[a-zA-Z0-9\s,'-]*$/;
+        return addressRegex.test(address);
+      },
+      message: "Provide a valid address",
+    },
+  },
+
   crimeDate: {
     type: Date,
     required: [true, "Please specify the date of crime"],
-    validate: {
-      validator: function (date) {
-        return Date.now() > date;
+    validate: [
+      {
+        validator: function (date) {
+          return Date.now() > date;
+        },
+        message: "Please provide a valid date",
       },
-      message: "Provide valid date",
-    },
+      {
+        validator: function validateDateLessThan50Years(date) {
+          const currentDate = new Date();
+          const dateRange = new Date();
+          dateRange.setFullYear(currentDate.getFullYear() - 30);
+          return dateRange <= date;
+        },
+        message: "Please provide a valid date",
+      },
+    ],
   },
   province: {
     type: String,
@@ -65,9 +87,13 @@ const complainSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  crimeType: {
+    type: String,
+    required: true,
+  },
   status: {
     type: String,
-    enum: ["Pending", "In progress", "Solved"],
+    enum: ["Pending", "Under investigation", "Resolved", "Closed"],
     default: "Pending",
   },
   complainer: {

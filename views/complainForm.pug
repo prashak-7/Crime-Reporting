@@ -1,32 +1,44 @@
 extends base
 block content
-  main.main
+  main.main.main-form
     .form__container.complain-form
       h2.heading-secondary Register Complaint
       form.form.form--complain
         .form__group__container
           .form__group
             label.form__label(for="name") Full Name
-            input#name.form__input(type="text" placeholder="Complainer name" required) 
+            input#name.form__input(type="text" placeholder="Complainer name") 
           .form__group
             label.form__label(for="contact-num") Contact number 
-            input#contact-num.form__input(type="number" placeholder="+977" required)
+            input#contact-num.form__input(type="number" placeholder="+977")
           .form__group
             label.form__label(for="location") Crime Location
-            input#location.form__input(type="text" placeholder="e.g. Ring road" required) 
+            input#location.form__input(type="text" placeholder="e.g. Ring road") 
           .form__group
             label.form__label(for="crime-date") Date of crime 
             input#crime-date.form__input(type="date")
           .form__group 
             label.form__label(for="province") Province
-            input#province.form__input(type="text" value="Bagmati" readonly="readonly")
+            input#province.form__input(type="text" value="Bagmati"  disabled)
           .form__group 
             label.form__label(for="police-station") Police Station
             select#police-station.select
               each station in stations.policeStations
                 option(value=`${station}`)= station   
           .form__group 
+            label.form__label(for="crime-type") Crime Type 
+            select#crime-type.select
+              each crime in crimes.crimeTypes   
+                option(value=`${crime}`)= crime 
+              //- option(value="violent") Violent Crimes  
+              //- option(value="property") Property Crimes 
+              //- option(value="drug") Drug-Related Crimes
+              //- option(value="domestic") Domestic Violence
+              //- option(value="environmental") Environmental Crimes
+              //- option(value="hate") Hate Crimes
+              //- option(value="not listed") Not listed
+          .form__group 
             label.form__label(for="crime-description") Crime Description
-            textarea#crime-description.textarea(cols="30", rows="10" required)  
+            textarea#crime-description.textarea(cols="30", rows="10")  
           .form__group 
             input.form-btn.login(type="submit" value='Register Complaint')

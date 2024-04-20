@@ -4,8 +4,23 @@ block content
   section.section__inner
     if (complaints.length >=1)
       .table 
-        section.table__header 
-          h2.heading-secondary All Complaint Reports 
+        section.table__header-complaint 
+          h2.heading-secondary Complaint Reports 
+          form.form-sort
+              .select-group 
+                p Sort By
+                select#sort-type-one
+                  option(value="") All
+                  option(value="") Date
+                  option(value="") Status
+                  option(value="") Police Station
+                  option(value="") Crime Type
+                select#sort-type-two
+                  option(value="") Dog
+                  option(value="") Cat
+                  option(value="") Ball
+                  option(value="") Apple
+                input.btn-sort(type="submit" value="Show")
         section.table__body 
           table
             thead 
@@ -21,11 +36,11 @@ block content
               each complaint,i in complaints
                 tr 
                   td= i+1
-                  td= complaint.fullName 
+                  td: a.user(href=`/user/${complaint.complainer._id}`)= complaint.fullName
                   td= complaint.complainedDate.toLocaleDateString('en-us')
                   td= complaint.crimeDate.toLocaleDateString("en-us")
                   td= complaint.policeStation
                   td= complaint.status
-                  td: a(href=`/all-complaints/${complaint._id}`) View
+                  td: a.cta(href=`/all-complaints/${complaint._id}`) View
     else
       p.complaint__msg No registered complaint found.

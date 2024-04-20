@@ -24,16 +24,21 @@ block content
       div 
         p Police Station 
         p= complaint.policeStation 
+      div   
+        p Crime Type 
+        p= complaint.crimeType
       div 
         p Crime Description 
         p= complaint.crimeDescription
+
       div 
         p Status
         form.form--updateComplaint
-          select#status
+          select.select-status#status
             option(value="Pending") Pending 
-            option(value="In progress") In Progress
-            option(value="Solved") Solved
+            option(value="Under investigation") Under Investigation
+            option(value="Resolved") Resolved
+            option(value="Closed") Closed
           .btn__group
             input(type="submit" value="Update")
             input(type="submit" value="Delete") 

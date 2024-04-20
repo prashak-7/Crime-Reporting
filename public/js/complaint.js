@@ -8,7 +8,8 @@ export const complaint = async (
   crimeDate,
   crimeDescription,
   province,
-  policeStation
+  policeStation,
+  crimeType
 ) => {
   try {
     const res = await axios({
@@ -22,6 +23,7 @@ export const complaint = async (
         crimeDescription,
         province,
         policeStation,
+        crimeType,
       },
     });
 

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const stationSchema = new mongoose.Schema({
   policeStations: {
-    type: [String],
+    type: [Object],
   },
 });
 

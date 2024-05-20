@@ -23,8 +23,8 @@ block content
           .form__group 
             label.form__label(for="police-station") Police Station
             select#police-station.select
-              each station in stations.policeStations
-                option(value=`${station}`)= station   
+              each station in stations
+                option(value=`${station.name}`)= `${station.name}, ${station.location}`   
           .form__group 
             label.form__label(for="crime-type") Crime Type 
             select#crime-type.select

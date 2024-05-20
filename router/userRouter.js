@@ -52,4 +52,5 @@ router.get(
   userController.getUser
 );
 
+
 module.exports = router;

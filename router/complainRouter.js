@@ -24,6 +24,8 @@ router.get(
   complainController.getAllComplaints
 );
 
+router.get("/api/all-complaints", complainController.getAllComplaintsApi);
+
 router.get(
   "/all-complaints/:id",
   authController.protect,

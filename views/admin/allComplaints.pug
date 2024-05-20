@@ -8,18 +8,14 @@ block content
           h2.heading-secondary Complaint Reports 
           form.form-sort
               .select-group 
-                p Sort By
+                p Look for
                 select#sort-type-one
-                  option(value="") All
-                  option(value="") Date
-                  option(value="") Status
-                  option(value="") Police Station
-                  option(value="") Crime Type
+                  option(value="all") All
+                  option(value="crimeDate") Date
+                  option(value="status") Status
+                  option(value="policeStation") Police Station
+                  option(value="crimeType") Crime Type
                 select#sort-type-two
-                  option(value="") Dog
-                  option(value="") Cat
-                  option(value="") Ball
-                  option(value="") Apple
                 input.btn-sort(type="submit" value="Show")
         section.table__body 
           table
@@ -36,11 +32,19 @@ block content
               each complaint,i in complaints
                 tr 
                   td= i+1
-                  td: a.user(href=`/user/${complaint.complainer._id}`)= complaint.fullName
-                  td= complaint.complainedDate.toLocaleDateString('en-us')
-                  td= complaint.crimeDate.toLocaleDateString("en-us")
-                  td= complaint.policeStation
-                  td= complaint.status
-                  td: a.cta(href=`/all-complaints/${complaint._id}`) View
+                  if (complaint.complainer === null)
+                    td= complaint.fullName
+                    td= complaint.complainedDate.toLocaleDateString('en-us')
+                    td= complaint.crimeDate.toLocaleDateString("en-us")
+                    td= complaint.policeStation
+                    td= complaint.status
+                    td: a.cta(href=`/all-complaints/${complaint._id}`) View
+                  else 
+                    td: a.user(href=`/user/${complaint.complainer._id}`)= complaint.fullName
+                    td= complaint.complainedDate.toLocaleDateString('en-us')
+                    td= complaint.crimeDate.toLocaleDateString("en-us")
+                    td= complaint.policeStation
+                    td= complaint.status
+                    td: a.cta(href=`/all-complaints/${complaint._id}`) View
     else
       p.complaint__msg No registered complaint found.

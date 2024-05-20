@@ -93,7 +93,7 @@ const complainSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["Pending", "Under investigation", "Resolved", "Closed"],
+    enum: ["Pending", "Under Investigation", "Resolved", "Closed"],
     default: "Pending",
   },
   complainer: {

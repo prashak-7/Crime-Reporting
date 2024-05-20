@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "Age is required"],
     validate: {
       validator: function (val) {
-        return !isNaN(val) && typeof val === "number" && val >= 5;
+        return !isNaN(val) && typeof val === "number" && val >= 5 && val <= 120;
       },
       message: "Invalid age",
     },

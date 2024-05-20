@@ -51,7 +51,7 @@ exports.getUserDashboard = catchAsync(async (req, res, next) => {
 });
 
 exports.getComplainForm = catchAsync(async (req, res, next) => {
-  const stations = await PoliceStation.findOne();
+  const { policeStations: stations } = await PoliceStation.findOne();
   const crimes = await CrimeType.findOne();
   res
     .status(200)

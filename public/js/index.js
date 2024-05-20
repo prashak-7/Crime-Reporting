@@ -1,4 +1,3 @@
-// DEALS WITH GETTING DATA FROM USER INTERFACE AND DELEGATING THE ACTION
 import { register, login, logout } from "./login";
 import { updateUser } from "./updateUser";
 import { complaint, updateComplaint } from "./complaint";
@@ -6,12 +5,18 @@ import { adminLogin } from "./admin";
 import { logoutAdmin } from "./admin";
 import { deleteComplaint } from "./complaint";
 import { deleteUser } from "./deleteUser";
+import { sortComplaint } from "./sortComplaint";
 
 const registerForm = document.querySelector(".form--register");
 const loginForm = document.querySelector(".form--login");
 const logOutBtn = document.querySelector("#logout");
 const adminLoginForm = document.querySelector(".form--adminLogin");
 const logOutAdminBtn = document.querySelector("#logoutAdmin");
+
+// Sort
+const sortBy = document.querySelector("#sort-type-one");
+const sortBasedOn = document.querySelector("#sort-type-two");
+const sortForm = document.querySelector(".form-sort");
 
 // ACCOUNT SETTINGS
 const userPhotoForm = document.querySelector(".user-photo");
@@ -20,7 +25,6 @@ const userDeleteForm = document.querySelector(".delete-user");
 const modal = document.querySelector(".modal");
 const overlay = document.querySelector(".overlay");
 const deleteBtnCta = document.querySelector(".delete-btn-cta");
-const deleteBtn = document.querySelector(".delete-btn-form");
 
 //  COMPLAIN
 const complainForm = document.querySelector(".form--complain");
@@ -161,3 +165,106 @@ if (adminLoginForm)
     const password = document.getElementById("adminPassword").value;
     adminLogin(email, password);
   });
+
+if (sortBy) {
+  if (sortBy.value === "all") sortBasedOn.hidden = true;
+
+  function handleDropDownChange(e) {
+    const curValue = e.target.value;
+    if (curValue === "all") {
+      sortBasedOn.hidden = true;
+      sortBasedOn.innerHTML = "";
+    } else sortBasedOn.hidden = false;
+  }
+
+  function handleDateDropDown(e) {
+    const curValue = e.target.value;
+    if (curValue === "crimeDate") {
+      sortBasedOn.innerHTML = "";
+      const dateOption = [
+        "Today",
+        "One week ago",
+        "One month ago",
+        "One year ago",
+      ];
+      dateOption.forEach((date) => {
+        const option = document.createElement("option");
+        option.value = date;
+        option.textContent = date;
+        sortBasedOn.appendChild(option);
+      });
+    }
+  }
+
+  function handleStatusDropDown(e) {
+    const curValue = e.target.value;
+    if (curValue === "status") {
+      sortBasedOn.innerHTML = "";
+      const statusOption = [
+        "Pending",
+        "Under Investigation",
+        "Resolved",
+        "Closed",
+      ];
+      statusOption.forEach((status) => {
+        const option = document.createElement("option");
+        option.value = status;
+        option.textContent = status;
+        sortBasedOn.appendChild(option);
+      });
+    }
+  }
+
+  async function handleStationDropDown(e) {
+    const curValue = e.target.value;
+    if (curValue === "policeStation") {
+      sortBasedOn.innerHTML = "";
+      const res = await fetch("/stations");
+      const data = await res.json();
+      const stations = data.data.stations.policeStations;
+      stations.forEach((station) => {
+        const option = document.createElement("option");
+        option.value = station.name;
+        option.textContent = station.name;
+        sortBasedOn.appendChild(option);
+      });
+    }
+  }
+
+  function handleCrimeTypeDropDown(e) {
+    const curValue = e.target.value;
+    if (curValue === "crimeType") {
+      sortBasedOn.innerHTML = "";
+      const crimeTypes = [
+        "Violent crimes",
+        "Property crimes",
+        "Domestic violence",
+        "Drug-related crimes",
+        "Hate crimes",
+        "Environmental crimes",
+        "Others",
+      ];
+      crimeTypes.forEach((crime) => {
+        const option = document.createElement("option");
+        option.value = crime;
+        option.textContent = crime;
+        sortBasedOn.appendChild(option);
+      });
+    }
+  }
+
+  sortBy.addEventListener("change", handleDropDownChange);
+  sortBy.addEventListener("change", handleDateDropDown);
+  sortBy.addEventListener("change", handleStatusDropDown);
+  sortBy.addEventListener("change", handleStationDropDown);
+  sortBy.addEventListener("change", handleCrimeTypeDropDown);
+}
+
+if (sortForm) {
+  sortForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const sortOne = sortBy.value;
+    const sortTwo = sortBasedOn.value;
+    sortComplaint(sortOne, sortTwo);
+  });
+}

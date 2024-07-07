@@ -14,13 +14,15 @@ export const sortComplaint = async (sortOne, sortTwo) => {
     tbody.innerHTML = "";
 
     if (complaints.length >= 1) {
+      document.querySelector(
+        ".num-results"
+      ).textContent = `Matches found ${complaints.length}`;
       table.hidden = false;
       tableBody.style.background = "#f7f7f7";
       const pMsg = document.querySelector(".complaint__msg");
       if (pMsg) {
         pMsg.remove();
       }
-      console.log("next");
       complaints.forEach((complaint, i) => {
         const tr = document.createElement("tr");
         const tdIndex = document.createElement("td");
@@ -72,12 +74,13 @@ export const sortComplaint = async (sortOne, sortTwo) => {
         tbody.appendChild(tr);
       });
     } else {
+      document.querySelector(".num-results").textContent = "";
       table.hidden = true;
       tableBody.style.background = "none";
       const pMsg = document.querySelector(".complaint__msg");
       if (!pMsg) {
         const p = document.createElement("p");
-        p.textContent = "No complaint found 🔍";
+        p.textContent = "No complaints found 🔍";
         p.classList.add("complaint__msg");
         tableBody.append(p);
       }

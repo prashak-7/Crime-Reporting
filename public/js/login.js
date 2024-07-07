@@ -34,6 +34,8 @@ export const register = async (
   confirmPassword
 ) => {
   try {
+    const spinner = `<div class="spinner"></div>`;
+    showAlert("success", spinner);
     const res = await axios({
       method: "POST",
       url: "http://127.0.0.1:8000/api/register",
@@ -48,12 +50,14 @@ export const register = async (
         confirmPassword,
       },
     });
-
     if (res.data.status === "success") {
-      showAlert("success", "Your registration was successfull");
+      showAlert(
+        "success",
+        "Registration successful. Please check your email for confirmation."
+      );
       window.setTimeout(() => {
         location.assign("/login");
-      }, 1000);
+      }, 2250);
     }
   } catch (err) {
     showAlert("error", err.response.data.message);

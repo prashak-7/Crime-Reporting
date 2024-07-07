@@ -1,0 +1,16 @@
+extends baseEmail 
+
+block content
+  p Hi #{firstName},
+    p We hope this message finds you well. We are writing to inform you of an update regarding your crime report filed through our Crime Reporting System.
+    h2 Complaint Status [#{status}]
+    table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+      tbody
+        tr
+          td(align='left')
+            table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+              tbody
+                tr
+                  td
+                    a(href=`${url}`, target='_blank') Login
+    p Thank you for using our Crime Reporting System. We appreciate your cooperation and understanding.

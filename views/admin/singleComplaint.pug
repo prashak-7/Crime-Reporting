@@ -35,10 +35,10 @@ block content
         p Status
         form.form--updateComplaint
           select.select-status#status
-            option(value="Pending") Pending 
-            option(value="Under Investigation") Under Investigation
-            option(value="Resolved") Resolved
-            option(value="Closed") Closed
+            option(value="Pending", selected=complaint.status === 'Pending') Pending 
+            option(value="Under Investigation", selected=complaint.status === 'Under Investigation') Under Investigation
+            option(value="Resolved", selected=complaint.status === 'Resolved') Resolved
+            option(value="Closed", selected=complaint.status === 'Closed') Closed
           .btn__group
             input(type="submit" value="Update")
             input(type="submit" value="Delete") 

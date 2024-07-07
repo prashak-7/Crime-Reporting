@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
-const AppError = require("../utils/appError");
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -33,7 +32,7 @@ const userSchema = new mongoose.Schema({
   address: {
     type: String,
     required: [true, "Address is required"],
-    minlength: [9, "Provide a valid address"],
+    minlength: [6, "Provide a valid address"],
     validate: {
       validator: function (address) {
         const addressRegex = /^[a-zA-Z0-9\s,'-]*$/;
@@ -67,6 +66,14 @@ const userSchema = new mongoose.Schema({
     required: [true, "Password is required"],
     minLength: [8, "Password must be 8 characters long"],
     select: false,
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+  registeredDate: {
+    type: Date,
+    default: Date.now(),
   },
   confirmPassword: {
     type: String,

@@ -1,4 +1,39 @@
 extends base
 block content
 
-  img.img-dashboard(src="img/admin.png")
+  .dashboard-wrapper
+    .section-summary
+      .summary.user-summary
+        h2.heading-summary Users Summary
+        .card-group 
+            p Total registered users 
+              span= users.length 
+            p Registered user today
+              - let today = new Date();
+              - let user = users.filter(user => {
+                  - let registeredDate = new Date(user.registeredDate);
+                  - return registeredDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0);
+              - }).length;
+              span #{user}
+            p Registered male users 
+              span= users.filter(user => user.gender === 'male').length 
+            p Registered female users 
+              span= users.filter(user => user.gender === 'female').length
+      .summary.complaint-summary
+        h2.heading-summary Complaints Summary 
+        .card-group 
+            p Total registered complaints
+              span= complaints.length
+            p Registered complaint today
+              - let todays = new Date();
+              - let complaint = complaints.filter(complaint => {
+                  - let complaintRegisteredDate = new Date(complaint.complainedDate);
+                  - return complaintRegisteredDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0);
+              - }).length;
+              span #{complaint}
+            p Pending complaints 
+              span= complaints.filter(complaint => complaint.status === 'Pending').length
+            p Resolved complaints 
+              span= complaints.filter(complaint => complaint.status === 'Resolved').length
+    .dashboard-img 
+      img.img-dashboard(src="img/admin.png")

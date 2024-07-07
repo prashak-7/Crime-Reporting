@@ -1,6 +1,7 @@
 const catchAsync = require("../utils/catchAsync");
 const Complain = require("../modals/complainModal");
-const PoliceStation = require("../modals/stationModal");
+const User = require("../modals/userModal");
+const Email = require("../utils/email");
 
 exports.createComplaint = catchAsync(async (req, res, next) => {
   // Allow nested routes
@@ -87,7 +88,7 @@ exports.getAllComplaintsApi = catchAsync(async (req, res, next) => {
         },
       });
     }
-    if (date === "One week ago") {
+    if (date === "Last week") {
       const oneWeekAgo = new Date();
       oneWeekAgo.setUTCDate(oneWeekAgo.getUTCDate() - 7);
 
@@ -105,7 +106,7 @@ exports.getAllComplaintsApi = catchAsync(async (req, res, next) => {
       });
     }
 
-    if (date === "One month ago") {
+    if (date === "Last month") {
       const oneMonthAgo = new Date();
       oneMonthAgo.setUTCMonth(oneMonthAgo.getUTCMonth() - 1);
 
@@ -123,7 +124,7 @@ exports.getAllComplaintsApi = catchAsync(async (req, res, next) => {
       });
     }
 
-    if (date === "One year ago") {
+    if (date === "Year ago") {
       const oneYearAgo = new Date();
       oneYearAgo.setUTCFullYear(oneYearAgo.getUTCFullYear() - 1);
 
@@ -200,10 +201,33 @@ exports.getComplaint = catchAsync(async (req, res, next) => {
 
 exports.updateComplaint = catchAsync(async (req, res, next) => {
   const { complaintId, status } = req.body;
-  await Complain.findByIdAndUpdate(complaintId, { status });
+  const complaint = await Complain.findByIdAndUpdate(complaintId, { status });
+  const user = await User.findById(complaint.complainer._id);
+  try {
+    if (complaint.complainer) {
+      const url = `${req.protocol}://${req.get("host")}/login`;
+      await new Email(user, url, status).updateComplaint();
+      res.status(200).json({
+        status: "success",
+      });
+    }
+  } catch (err) {
+    console.log("ERROR SENDING UPDATE COMPLAINT MAIL", err);
+  }
 });
 
 exports.deleteComplaint = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  await Complain.findByIdAndDelete(id);
+  const complaint = await Complain.findByIdAndDelete(id);
+  const user = await User.findById(complaint.complainer._id);
+  try {
+    if (complaint.complainer) {
+      await new Email(user).deleteComplaint();
+      res.status(200).json({
+        status: "success",
+      });
+    }
+  } catch (err) {
+    console.log("ERROR SENDING DELETE COMPLAINT MAIL", err);
+  }
 });

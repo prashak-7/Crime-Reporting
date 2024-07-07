@@ -4,8 +4,9 @@ import { complaint, updateComplaint } from "./complaint";
 import { adminLogin } from "./admin";
 import { logoutAdmin } from "./admin";
 import { deleteComplaint } from "./complaint";
-import { deleteUser } from "./deleteUser";
+import { deleteUser, adminDeleteUser } from "./deleteUser";
 import { sortComplaint } from "./sortComplaint";
+import { sortUser } from "./sortUser";
 
 const registerForm = document.querySelector(".form--register");
 const loginForm = document.querySelector(".form--login");
@@ -13,10 +14,15 @@ const logOutBtn = document.querySelector("#logout");
 const adminLoginForm = document.querySelector(".form--adminLogin");
 const logOutAdminBtn = document.querySelector("#logoutAdmin");
 
-// Sort
-const sortBy = document.querySelector("#sort-type-one");
-const sortBasedOn = document.querySelector("#sort-type-two");
-const sortForm = document.querySelector(".form-sort");
+// Sort User
+const sortByUser = document.querySelector("#sort-type-user");
+const sortUserBasedOn = document.querySelector("#sort-user-base");
+const sortFormUser = document.querySelector(".form-sortUser");
+
+// Sort Complaint
+const sortByComplaint = document.querySelector("#sort-type-complaint");
+const sortComplaintBasedOn = document.querySelector("#sort-complaint-base");
+const sortFormComplaint = document.querySelector(".form-sortComplaint");
 
 // ACCOUNT SETTINGS
 const userPhotoForm = document.querySelector(".user-photo");
@@ -29,6 +35,9 @@ const deleteBtnCta = document.querySelector(".delete-btn-cta");
 //  COMPLAIN
 const complainForm = document.querySelector(".form--complain");
 const updateComplaintForm = document.querySelector(".form--updateComplaint");
+
+// USER
+const delUser = document.querySelectorAll(".del-user");
 
 if (loginForm)
   loginForm.addEventListener("submit", (e) => {
@@ -166,32 +175,37 @@ if (adminLoginForm)
     adminLogin(email, password);
   });
 
-if (sortBy) {
-  if (sortBy.value === "all") sortBasedOn.hidden = true;
+if (delUser) {
+  delUser.forEach((user) => {
+    user.addEventListener("click", () => {
+      console.log(user.dataset.userId);
+      adminDeleteUser(user.dataset.userId);
+    });
+  });
+}
+
+// COMPLAINT SORTING
+if (sortByComplaint) {
+  if (sortByComplaint.value === "all") sortComplaintBasedOn.hidden = true;
 
   function handleDropDownChange(e) {
     const curValue = e.target.value;
     if (curValue === "all") {
-      sortBasedOn.hidden = true;
-      sortBasedOn.innerHTML = "";
-    } else sortBasedOn.hidden = false;
+      sortComplaintBasedOn.hidden = true;
+      sortComplaintBasedOn.innerHTML = "";
+    } else sortComplaintBasedOn.hidden = false;
   }
 
   function handleDateDropDown(e) {
     const curValue = e.target.value;
     if (curValue === "crimeDate") {
-      sortBasedOn.innerHTML = "";
-      const dateOption = [
-        "Today",
-        "One week ago",
-        "One month ago",
-        "One year ago",
-      ];
+      sortComplaintBasedOn.innerHTML = "";
+      const dateOption = ["Today", "Last week", "Last month", "Year ago"];
       dateOption.forEach((date) => {
         const option = document.createElement("option");
         option.value = date;
         option.textContent = date;
-        sortBasedOn.appendChild(option);
+        sortComplaintBasedOn.appendChild(option);
       });
     }
   }
@@ -199,7 +213,7 @@ if (sortBy) {
   function handleStatusDropDown(e) {
     const curValue = e.target.value;
     if (curValue === "status") {
-      sortBasedOn.innerHTML = "";
+      sortComplaintBasedOn.innerHTML = "";
       const statusOption = [
         "Pending",
         "Under Investigation",
@@ -210,7 +224,7 @@ if (sortBy) {
         const option = document.createElement("option");
         option.value = status;
         option.textContent = status;
-        sortBasedOn.appendChild(option);
+        sortComplaintBasedOn.appendChild(option);
       });
     }
   }
@@ -218,7 +232,7 @@ if (sortBy) {
   async function handleStationDropDown(e) {
     const curValue = e.target.value;
     if (curValue === "policeStation") {
-      sortBasedOn.innerHTML = "";
+      sortComplaintBasedOn.innerHTML = "";
       const res = await fetch("/stations");
       const data = await res.json();
       const stations = data.data.stations.policeStations;
@@ -226,7 +240,7 @@ if (sortBy) {
         const option = document.createElement("option");
         option.value = station.name;
         option.textContent = station.name;
-        sortBasedOn.appendChild(option);
+        sortComplaintBasedOn.appendChild(option);
       });
     }
   }
@@ -234,7 +248,7 @@ if (sortBy) {
   function handleCrimeTypeDropDown(e) {
     const curValue = e.target.value;
     if (curValue === "crimeType") {
-      sortBasedOn.innerHTML = "";
+      sortComplaintBasedOn.innerHTML = "";
       const crimeTypes = [
         "Violent crimes",
         "Property crimes",
@@ -248,23 +262,98 @@ if (sortBy) {
         const option = document.createElement("option");
         option.value = crime;
         option.textContent = crime;
-        sortBasedOn.appendChild(option);
+        sortComplaintBasedOn.appendChild(option);
       });
     }
   }
 
-  sortBy.addEventListener("change", handleDropDownChange);
-  sortBy.addEventListener("change", handleDateDropDown);
-  sortBy.addEventListener("change", handleStatusDropDown);
-  sortBy.addEventListener("change", handleStationDropDown);
-  sortBy.addEventListener("change", handleCrimeTypeDropDown);
+  sortByComplaint.addEventListener("change", handleDropDownChange);
+  sortByComplaint.addEventListener("change", handleDateDropDown);
+  sortByComplaint.addEventListener("change", handleStatusDropDown);
+  sortByComplaint.addEventListener("change", handleStationDropDown);
+  sortByComplaint.addEventListener("change", handleCrimeTypeDropDown);
 }
 
-if (sortForm) {
-  sortForm.addEventListener("submit", (e) => {
+if (sortFormComplaint) {
+  sortFormComplaint.addEventListener("submit", (e) => {
     e.preventDefault();
-    const sortOne = sortBy.value;
-    const sortTwo = sortBasedOn.value;
+    const sortOne = sortByComplaint.value;
+    const sortTwo = sortComplaintBasedOn.value;
     sortComplaint(sortOne, sortTwo);
+  });
+}
+
+// USER SORTING
+if (sortByUser) {
+  if (sortByUser.value === "all") sortUserBasedOn.hidden = true;
+
+  function handleDropDownChangeUser(e) {
+    const curValue = e.target.value;
+    if (curValue === "all") {
+      sortUserBasedOn.hidden = true;
+      sortUserBasedOn.innerHTML = "";
+    } else sortUserBasedOn.hidden = false;
+  }
+
+  function handleGenderDropDown(e) {
+    const curValue = e.target.value;
+    if (curValue === "gender") {
+      sortUserBasedOn.innerHTML = "";
+      const genderOptions = ["male", "female", "others"];
+      genderOptions.forEach((gender) => {
+        const option = document.createElement("option");
+        option.value = gender;
+        option.textContent = gender.charAt(0).toUpperCase() + gender.slice(1);
+        sortUserBasedOn.appendChild(option);
+      });
+    }
+  }
+
+  // function handleAgeDropDown(e) {
+  //   const curValue = e.target.value;
+  //   if (curValue === "age") {
+  //     sortUserBasedOn.innerHTML = "";
+  //     const ageOptions = [
+  //       "Children (5-12)",
+  //       "Teen (13-18)",
+  //       "Young adults (19-30)",
+  //       "Adults (31-60)",
+  //       "Elderly (61+)",
+  //     ];
+  //     ageOptions.forEach((age) => {
+  //       const option = document.createElement("option");
+  //       option.value = age;
+  //       option.textContent = age;
+  //       sortUserBasedOn.appendChild(option);
+  //     });
+  //   }
+  // }
+
+  function handleRegisteredDateDropDown(e) {
+    const curValue = e.target.value;
+    if (curValue === "registeredDate") {
+      sortUserBasedOn.innerHTML = "";
+      const dateOptions = ["Today", "Last week", "Last month"];
+      dateOptions.forEach((date) => {
+        const option = document.createElement("option");
+        option.value = date;
+        option.textContent = date;
+        sortUserBasedOn.appendChild(option);
+      });
+    }
+  }
+
+  sortByUser.addEventListener("change", handleDropDownChangeUser);
+  sortByUser.addEventListener("change", handleGenderDropDown);
+  // sortByUser.addEventListener("change", handleAgeDropDown);
+  sortByUser.addEventListener("change", handleRegisteredDateDropDown);
+}
+
+if (sortFormUser) {
+  sortFormUser.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const sortOne = sortByUser.value;
+    const sortTwo = sortUserBasedOn.value;
+    sortUser(sortOne, sortTwo);
   });
 }

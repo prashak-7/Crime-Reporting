@@ -62,6 +62,11 @@ td {
   min-width: 100px;
 }
 
+td.crimeDescription {
+  max-height: 80px;
+  overflow: hidden;
+}
+
 thead th {
   position: sticky;
   top: 0;

@@ -1,6 +1,7 @@
 const User = require("../modals/userModal");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const Email = require("../utils/email");
 const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 
@@ -17,8 +18,6 @@ const createAndSentToken = (user, statusCode, res) => {
     ),
     httpOnly: true,
   });
-
-  // user.password = undefined;
 
   res.status(statusCode).json({
     status: "success",
@@ -41,7 +40,26 @@ exports.registerUser = catchAsync(async (req, res) => {
     gender: req.body.gender,
   });
 
-  createAndSentToken(newUser, 201, res);
+  try {
+    const token = signToken(newUser._id);
+    const url = `${req.protocol}://${req.get("host")}/confirm/${token}`;
+    await new Email(newUser, url).confirmEmail();
+    res.status(200).json({
+      status: "success",
+      token,
+    });
+  } catch (err) {
+    console.log("ERROR SENDING REGISTER USER MAIL", err);
+  }
+});
+
+exports.confirmUser = catchAsync(async (req, res, next) => {
+  const token = req.params.token;
+  const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+  await User.findByIdAndUpdate(decoded.id, { verified: true });
+  res.status(200).render("email/confirmEmail", {
+    title: "Confirm Your Email",
+  });
 });
 
 exports.loginUser = catchAsync(async (req, res, next) => {
@@ -52,6 +70,9 @@ exports.loginUser = catchAsync(async (req, res, next) => {
   }
 
   const user = await User.findOne({ email, role: "user" }).select("+password");
+
+  if (user && !user.verified)
+    return next(new AppError("Your email address has not been confirmed yet"));
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError("Incorrect email or password", 401));

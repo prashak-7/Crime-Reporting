@@ -5,6 +5,7 @@ const userController = require("../controllers/userController");
 const router = express.Router();
 
 router.post("/register", authController.registerUser);
+router.get("/confirm/:token", authController.confirmUser);
 router.post("/login", authController.loginUser);
 router.get("/logout", authController.logout);
 
@@ -38,11 +39,20 @@ router.get(
   userController.getAllUsers
 );
 
+router.get("/api/all-users", userController.getAllUsersApi);
+
 router.post(
   "/delete-me",
   authController.protect,
   authController.restrictTo("user"),
   userController.deleteMe
+);
+
+router.post(
+  "/delete-user",
+  authController.protect,
+  authController.restrictTo("admin"),
+  userController.deleteUser
 );
 
 router.get(
@@ -51,6 +61,5 @@ router.get(
   authController.restrictTo("admin"),
   userController.getUser
 );
-
 
 module.exports = router;

@@ -4,8 +4,20 @@ block content
   section.section__inner
     if (users.length >=1)
       .table 
-        section.table__header 
+        section.table__header
           h2.heading-secondary All Users 
+          form.form-sortUser
+              .select-group
+                div 
+                  p Look for
+                  select#sort-type-user
+                    option(value="all") All
+                    option(value="gender") Gender
+                    //- option(value="age") Age Group
+                    option(value="registeredDate") Registered Date
+                  select#sort-user-base
+                  input.btn-sort(type="submit" value="Show")
+                p.num-results Matches found #{users.length}
         section.table__body 
           table 
             thead 
@@ -15,6 +27,7 @@ block content
                 th Name 
                 th Email
                 th Address
+                th Action
             tbody 
               each user,i in users 
                 tr 
@@ -23,5 +36,6 @@ block content
                   td #{user.firstName} #{user.lastName}
                   td= user.email 
                   td= user.address
+                  td: a.del-user( data-user-id=user._id href="/all-users") Delete 
     else 
       p.complaint__msg No registered users found.

@@ -3,6 +3,7 @@ const sharp = require("sharp");
 const User = require("../modals/userModal");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const Email = require("../utils/email");
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -74,6 +75,114 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   res.status(200).render("admin/allUsers", { users });
 });
 
+exports.getAllUsersApi = catchAsync(async (req, res, next) => {
+  const queryObj = { ...req.query };
+  if (queryObj.all === "") {
+    const users = await User.find({ role: "user" });
+    return res.status(200).json({
+      status: "success",
+      data: {
+        users,
+      },
+    });
+  }
+
+  if (queryObj.gender) {
+    const gender = queryObj.gender;
+    if (gender === "male") {
+      const users = await User.find({ gender: "male" });
+      return res.status(200).json({
+        status: "success",
+        data: {
+          users,
+        },
+      });
+    }
+
+    if (gender === "female") {
+      const users = await User.find({ gender: "female" });
+      return res.status(200).json({
+        status: "success",
+        data: {
+          users,
+        },
+      });
+    }
+
+    if (gender === "others") {
+      const users = await User.find({ gender: "others" });
+      return res.status(200).json({
+        status: "success",
+        data: {
+          users,
+        },
+      });
+    }
+  }
+
+  if (queryObj.registeredDate) {
+    const date = queryObj.registeredDate;
+    if (date === "Today") {
+      const today = new Date();
+      today.setUTCHours(0, 0, 0, 0);
+
+      const startOfDay = today.toISOString();
+      const endOfDay = new Date(
+        today.getTime() + 24 * 60 * 60 * 1000
+      ).toISOString();
+
+      const users = await User.find({
+        registeredDate: {
+          $gte: startOfDay,
+          $lt: endOfDay,
+        },
+      });
+
+      return res.status(200).json({
+        status: "success",
+        data: {
+          users,
+        },
+      });
+    }
+    if (date === "Last week") {
+      const weekAgo = new Date();
+      weekAgo.setUTCDate(weekAgo.getUTCDate() - 7);
+
+      const users = await User.find({
+        registeredDate: {
+          $gte: weekAgo.toISOString(),
+          $lte: new Date().toISOString(),
+        },
+      });
+      return res.status(200).json({
+        status: "success",
+        data: {
+          users,
+        },
+      });
+    }
+
+    if (date === "Last month") {
+      const monthAgo = new Date();
+      monthAgo.setUTCMonth(monthAgo.getUTCMonth() - 1);
+
+      const users = await User.find({
+        registeredDate: {
+          $gte: monthAgo.toISOString(),
+          $lt: new Date().toISOString(),
+        },
+      });
+      return res.status(200).json({
+        status: "success",
+        data: {
+          users,
+        },
+      });
+    }
+  }
+});
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   const filteredBody = filterObj(req.body, "");
   if (req.file) filteredBody.photo = req.file.filename;
@@ -105,4 +214,17 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     res.status(200).json({
       status: "success",
     });
+});
+
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  const id = req.body.userId;
+  const user = await User.findByIdAndDelete(id);
+  try {
+    await new Email(user).deleteUser();
+    res.status(200).json({
+      status: "success",
+    });
+  } catch (err) {
+    console.log("ERROR SENDING DELETE USER MAIL", err);
+  }
 });

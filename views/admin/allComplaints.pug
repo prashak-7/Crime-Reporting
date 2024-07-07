@@ -4,19 +4,21 @@ block content
   section.section__inner
     if (complaints.length >=1)
       .table 
-        section.table__header-complaint 
+        section.table__header
           h2.heading-secondary Complaint Reports 
-          form.form-sort
+          form.form-sortComplaint
               .select-group 
-                p Look for
-                select#sort-type-one
-                  option(value="all") All
-                  option(value="crimeDate") Date
-                  option(value="status") Status
-                  option(value="policeStation") Police Station
-                  option(value="crimeType") Crime Type
-                select#sort-type-two
-                input.btn-sort(type="submit" value="Show")
+                div 
+                  p Look for
+                  select#sort-type-complaint
+                    option(value="all") All
+                    option(value="crimeDate") Crime Date
+                    option(value="status") Status
+                    option(value="policeStation") Police Station
+                    option(value="crimeType") Crime Type
+                  select#sort-complaint-base
+                  input.btn-sort(type="submit" value="Show")
+                p.num-results Matches found #{complaints.length}
         section.table__body 
           table
             thead 

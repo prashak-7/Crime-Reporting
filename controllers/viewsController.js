@@ -1,6 +1,8 @@
 const PoliceStation = require("../modals/stationModal");
 const CrimeType = require("../modals/crimeTypeModal");
 const catchAsync = require("../utils/catchAsync");
+const User = require("../modals/userModal");
+const Complain = require("../modals/complainModal");
 
 exports.getOverview = catchAsync(async (req, res, next) => {
   res
@@ -25,6 +27,12 @@ exports.getRegisterForm = catchAsync(async (req, res, next) => {
       title: "Register",
     });
 });
+
+// exports.getConfirmEmail = catchAsync(async (req, res, next) => {
+//   res.status(200).render("confirmEmail", {
+//     title: "Confirm Your Email",
+//   });
+// });
 
 exports.getLoginForm = catchAsync(async (req, res, next) => {
   res
@@ -73,11 +81,16 @@ exports.getAdminLoginForm = catchAsync(async (req, res, next) => {
 });
 
 exports.getAdminDashboard = catchAsync(async (req, res, next) => {
+  const users = await User.find({ role: "user" });
+  const complaints = await Complain.find();
   res
     .status(200)
     // .json({
     //   status: "success",
     //   message: "adminDashboard displayed",
     // });
-    .render("admin/adminDashboard");
+    .render("admin/adminDashboard", {
+      users,
+      complaints,
+    });
 });

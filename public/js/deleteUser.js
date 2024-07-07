@@ -20,3 +20,15 @@ export const deleteUser = async (password) => {
     showDeleteUserAlert("error", err.response.data.message);
   }
 };
+
+export const adminDeleteUser = async (userId) => {
+  try {
+    const res = await axios({
+      method: "post",
+      url: "http://127.0.0.1:8000/api/delete-user",
+      data: {
+        userId,
+      },
+    });
+  } catch (e) {}
+};
